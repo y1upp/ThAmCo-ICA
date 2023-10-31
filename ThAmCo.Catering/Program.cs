@@ -1,9 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+using ThAmCo.Catering.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Add Entity Framework Core service
+builder.Services.AddDbContext<CateringDbContext>(options =>
+{
+    // Use the default SQLite provider with no specific connection string
+    options.UseSqlite("Data Source=mydatabase.db");
+});
+
+// Add Swagger for API documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -17,9 +27,26 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseRouting(); // Add this line for routing
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+
+    // Configure the default route for MVC controllers
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=FoodBookings}/{action=Index}/{id?}");
+});
+
+// The following code will ensure that migrations are applied to create the database if it doesn't exist.
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<CateringDbContext>();
+    dbContext.Database.Migrate(); // Apply migrations and create the database if it doesn't exist.
+}
 
 app.Run();
