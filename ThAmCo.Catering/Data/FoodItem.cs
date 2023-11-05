@@ -1,4 +1,9 @@
-﻿namespace ThAmCo.Catering.Data
+﻿
+/*
+ * FoodItem class represents an individual food item.
+ */
+
+namespace ThAmCo.Catering.Data
 {
     public class FoodItem
     {
