@@ -1,4 +1,9 @@
-﻿namespace ThAmCo.Catering.Data
+﻿
+/*
+ * Menu class represents a food menu
+ */
+
+namespace ThAmCo.Catering.Data
 {
     public class Menu
     {

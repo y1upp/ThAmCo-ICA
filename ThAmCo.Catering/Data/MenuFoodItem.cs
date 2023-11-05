@@ -1,4 +1,10 @@
-﻿namespace ThAmCo.Catering.Data
+﻿
+/*
+ * MenuFoodItem class represents the relationship between
+ * a menu and its associated food items.
+ */
+
+namespace ThAmCo.Catering.Data
 {
     public class MenuFoodItem
     {

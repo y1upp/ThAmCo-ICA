@@ -1,6 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Catering.Data;
 
+/*
+ *  This code configures and sets up a web application that uses 
+ *  ASP.NET core to provide web services for the catering project. 
+ *  it includes adding services to the container, configuring Entity 
+ *  Framework Core for database access, setting up Swagger for API 
+ *  documentation, routing and ensuring that the database migrations  
+ *  are applied if needed. 
+ */
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

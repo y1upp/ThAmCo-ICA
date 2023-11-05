@@ -1,4 +1,9 @@
-﻿namespace ThAmCo.Catering.Data
+﻿
+/*
+ * FoodBooking class represents a booking for food for an event.
+ */
+
+namespace ThAmCo.Catering.Data
 {
     public class FoodBooking
     {
