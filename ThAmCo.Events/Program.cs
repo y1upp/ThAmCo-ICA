@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using ThAmCo.Events.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<EventsDbContext>(options =>
+{
+    options.UseSqlite("Data Source=events.db");
+});
 
 var app = builder.Build();
 
