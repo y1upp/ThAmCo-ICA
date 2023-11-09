@@ -11,8 +11,8 @@ using ThAmCo.Events.Data;
 namespace ThAmCo.Events.Migrations
 {
     [DbContext(typeof(EventsDbContext))]
-    [Migration("20231108185037_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231109185506_AddEventTypeIdToEvent")]
+    partial class AddEventTypeIdToEvent
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,6 +29,12 @@ namespace ThAmCo.Events.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("EventTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ReservationId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -38,7 +44,52 @@ namespace ThAmCo.Events.Migrations
 
                     b.HasKey("EventId");
 
+                    b.HasIndex("EventTypeId");
+
+                    b.HasIndex("ReservationId");
+
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("ThAmCo.Events.Data.EventType", b =>
+                {
+                    b.Property<int>("EventTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("EventTypeId");
+
+                    b.ToTable("EventType");
+
+                    b.HasData(
+                        new
+                        {
+                            EventTypeId = 1,
+                            Name = "Conference"
+                        },
+                        new
+                        {
+                            EventTypeId = 2,
+                            Name = "Workshop"
+                        },
+                        new
+                        {
+                            EventTypeId = 3,
+                            Name = "Music Festival"
+                        },
+                        new
+                        {
+                            EventTypeId = 4,
+                            Name = "Job Showcase"
+                        },
+                        new
+                        {
+                            EventTypeId = 5,
+                            Name = "University showcase"
+                        });
                 });
 
             modelBuilder.Entity("ThAmCo.Events.Data.Guest", b =>
@@ -90,6 +141,22 @@ namespace ThAmCo.Events.Migrations
                     b.ToTable("GuestBookings");
                 });
 
+            modelBuilder.Entity("ThAmCo.Events.Data.Reservation", b =>
+                {
+                    b.Property<int>("ReservationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EventTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ReservationId");
+
+                    b.HasIndex("EventTypeId");
+
+                    b.ToTable("Reservation");
+                });
+
             modelBuilder.Entity("ThAmCo.Events.Data.Staff", b =>
                 {
                     b.Property<int>("StaffId")
@@ -135,19 +202,40 @@ namespace ThAmCo.Events.Migrations
 
                     b.HasKey("StaffingId");
 
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("StaffId");
+
                     b.ToTable("Staffings");
+                });
+
+            modelBuilder.Entity("ThAmCo.Events.Data.Event", b =>
+                {
+                    b.HasOne("ThAmCo.Events.Data.EventType", "EventType")
+                        .WithMany()
+                        .HasForeignKey("EventTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ThAmCo.Events.Data.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId");
+
+                    b.Navigation("EventType");
+
+                    b.Navigation("Reservation");
                 });
 
             modelBuilder.Entity("ThAmCo.Events.Data.GuestBooking", b =>
                 {
                     b.HasOne("ThAmCo.Events.Data.Event", "Event")
-                        .WithMany()
+                        .WithMany("GuestBookings")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ThAmCo.Events.Data.Guest", "Guest")
-                        .WithMany()
+                        .WithMany("GuestBookings")
                         .HasForeignKey("GuestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -155,6 +243,53 @@ namespace ThAmCo.Events.Migrations
                     b.Navigation("Event");
 
                     b.Navigation("Guest");
+                });
+
+            modelBuilder.Entity("ThAmCo.Events.Data.Reservation", b =>
+                {
+                    b.HasOne("ThAmCo.Events.Data.EventType", "EventType")
+                        .WithMany()
+                        .HasForeignKey("EventTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EventType");
+                });
+
+            modelBuilder.Entity("ThAmCo.Events.Data.Staffing", b =>
+                {
+                    b.HasOne("ThAmCo.Events.Data.Event", "Event")
+                        .WithMany("staffings")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ThAmCo.Events.Data.Staff", "Staff")
+                        .WithMany("Staffings")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("ThAmCo.Events.Data.Event", b =>
+                {
+                    b.Navigation("GuestBookings");
+
+                    b.Navigation("staffings");
+                });
+
+            modelBuilder.Entity("ThAmCo.Events.Data.Guest", b =>
+                {
+                    b.Navigation("GuestBookings");
+                });
+
+            modelBuilder.Entity("ThAmCo.Events.Data.Staff", b =>
+                {
+                    b.Navigation("Staffings");
                 });
 #pragma warning restore 612, 618
         }

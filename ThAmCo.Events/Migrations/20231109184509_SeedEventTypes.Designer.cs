@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThAmCo.Events.Data;
 
@@ -10,9 +11,11 @@ using ThAmCo.Events.Data;
 namespace ThAmCo.Events.Migrations
 {
     [DbContext(typeof(EventsDbContext))]
-    partial class EventsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231109184509_SeedEventTypes")]
+    partial class SeedEventTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -54,39 +57,9 @@ namespace ThAmCo.Events.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("EventTypeId");
 
-                    b.ToTable("EventTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            EventTypeId = 1,
-                            Name = "Conference"
-                        },
-                        new
-                        {
-                            EventTypeId = 2,
-                            Name = "Workshop"
-                        },
-                        new
-                        {
-                            EventTypeId = 3,
-                            Name = "Music Festival"
-                        },
-                        new
-                        {
-                            EventTypeId = 4,
-                            Name = "Job Showcase"
-                        },
-                        new
-                        {
-                            EventTypeId = 5,
-                            Name = "University showcase"
-                        });
+                    b.ToTable("EventType");
                 });
 
             modelBuilder.Entity("ThAmCo.Events.Data.Guest", b =>
