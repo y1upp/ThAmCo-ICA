@@ -6,7 +6,7 @@
 
 namespace ThAmCo.Catering.DTO
 {
-    public class MenuDto
+    public class MenuDataDTO
     {
         public int MenuId { get; set; }
         public string MenuName { get; set; }

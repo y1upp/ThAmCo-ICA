@@ -9,6 +9,6 @@ namespace ThAmCo.Catering.DTO
     public class MenuFoodItemDto
     {
         public int FoodItemId { get; set; }
-        public string Menu { get; set; }
+        public int MenuId { get; set; }
     }
 }

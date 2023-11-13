@@ -28,13 +28,13 @@ namespace ThAmCo.Catering.Controllers
 
         // GET: api/Menu
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MenuDto>>> GetMenus()
+        public async Task<ActionResult<IEnumerable<MenuDataDTO>>> GetMenus()
         {
             // Retrieve a list of menus including associated menu food item
             var menus = await _context.Menus.Include(m => m.MenuFoodItems).ThenInclude(mfi => mfi.FoodItem).ToListAsync();
 
             // Map your data models to DTOs
-            var menuDtos = menus.Select(m => new MenuDto
+            var menuDtos = menus.Select(m => new MenuDataDTO
             {
                 MenuId = m.MenuId,
                 MenuName = m.MenuName,
@@ -51,7 +51,7 @@ namespace ThAmCo.Catering.Controllers
 
         //GET: api/Menu/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<MenuDto>> GetMenu(int id)
+        public async Task<ActionResult<MenuDataDTO>> GetMenu(int id)
         {
             // Retrieve a specific menu ID, including associated menu food items                  
             var menu = await _context.Menus.Include(m => m.MenuFoodItems).ThenInclude(mfi => mfi.FoodItem).FirstOrDefaultAsync(m => m.MenuId == id);
@@ -62,7 +62,7 @@ namespace ThAmCo.Catering.Controllers
             }
 
             // Map the data model to a DTO
-            var menuDto = new MenuDto
+            var menuDto = new MenuDataDTO
             {
                 MenuId = menu.MenuId,
                 MenuName = menu.MenuName,
@@ -80,13 +80,13 @@ namespace ThAmCo.Catering.Controllers
 
         // POST: api/Menu
         [HttpPost]
-        public async Task<ActionResult<MenuDto>> PostMenu(MenuDto menuDto)
+        public async Task<ActionResult<MenuDataDTO>> PostMenu(MenuDataDTO menuDto)
         {
             // Map the DTO to a data model
             var menu = new Menu
             {
                 MenuName = menuDto.MenuName,
-                //Map associated menu food items with new food items
+                // Map associated menu food items with new food items
                 MenuFoodItems = menuDto.MenuFoodItems.Select(mfiDto => new MenuFoodItem
                 {
                     FoodItem = new FoodItem
@@ -101,7 +101,7 @@ namespace ThAmCo.Catering.Controllers
             await _context.SaveChangesAsync();
 
             // Map the created data model back to a DTO
-            var createdMenuDto = new MenuDto
+            var createdMenuDto = new MenuDataDTO
             {
                 MenuId = menu.MenuId,
                 MenuName = menu.MenuName,
@@ -117,30 +117,40 @@ namespace ThAmCo.Catering.Controllers
             return CreatedAtAction("GetMenu", new { id = createdMenuDto.MenuId }, createdMenuDto);
         }
 
-        //PUT: api/Menu/{id}
+
+        // PUT: api/Menu/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMenu(int id, MenuDto menuDto)
+        public async Task<IActionResult> PutMenu(int id, MenuDataDTO menuDto)
         {
             if (id != menuDto.MenuId)
             {
                 return BadRequest();
             }
 
-            // Map the DTO to a data model
-            var menu = new Menu
+            // Retrieve the existing menu from the database
+            var menu = await _context.Menus
+                .Include(m => m.MenuFoodItems)
+                .FirstOrDefaultAsync(m => m.MenuId == id);
+
+            if (menu == null)
             {
-                MenuId = menuDto.MenuId,
-                MenuName = menuDto.MenuName,
-                // Map associated menu food items with new food items
-                MenuFoodItems = menuDto.MenuFoodItems.Select(mfiDto => new MenuFoodItem
+                return NotFound();
+            }
+
+            // Update properties of the existing menu
+            menu.MenuName = menuDto.MenuName;
+
+            // Update or add new food items
+            menu.MenuFoodItems.Clear(); // Remove existing menu food items
+
+            menu.MenuFoodItems.AddRange(menuDto.MenuFoodItems.Select(mfiDto => new MenuFoodItem
+            {
+                FoodItem = new FoodItem
                 {
-                    FoodItem = new FoodItem
-                    {
-                        Description = mfiDto.Description,
-                        UnitPrice = mfiDto.UnitPrice
-                    }
-                }).ToList()
-            };
+                    Description = mfiDto.Description,
+                    UnitPrice = mfiDto.UnitPrice
+                }
+            }));
 
             _context.Entry(menu).State = EntityState.Modified;
 
@@ -165,7 +175,7 @@ namespace ThAmCo.Catering.Controllers
 
         // DELETE: api/Menu/{id}
         [HttpDelete("{id}")]
-        public async Task<ActionResult<MenuDto>> DeleteMenu(int id)
+        public async Task<ActionResult<MenuDataDTO>> DeleteMenu(int id)
         {
             var menu = await _context.Menus.FindAsync(id);
             if (menu == null)
@@ -177,7 +187,7 @@ namespace ThAmCo.Catering.Controllers
             await _context.SaveChangesAsync();
 
             // Map the deleted data model to a DTO
-            var deletedMenuDto = new MenuDto
+            var deletedMenuDto = new MenuDataDTO
             {
                 MenuId = menu.MenuId,
                 MenuName = menu.MenuName,
