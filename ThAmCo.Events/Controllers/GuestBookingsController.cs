@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Controllers
@@ -45,32 +43,6 @@ namespace ThAmCo.Events.Controllers
             return View(guestBooking);
         }
 
-        // GET: GuestBookings/Create
-        public IActionResult Create()
-        {
-            ViewData["EventId"] = new SelectList(_context.Events, "EventId", "Title");
-            ViewData["GuestId"] = new SelectList(_context.Guests, "GuestId", "FirstName");
-            return View();
-        }
-
-        // POST: GuestBookings/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GuestBookingId,GuestId,EventId,BookingDate")] GuestBooking guestBooking)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(guestBooking);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["EventId"] = new SelectList(_context.Events, "EventId", "Title", guestBooking.EventId);
-            ViewData["GuestId"] = new SelectList(_context.Guests, "GuestId", "FirstName", guestBooking.GuestId);
-            return View(guestBooking);
-        }
-
         // GET: GuestBookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -90,8 +62,6 @@ namespace ThAmCo.Events.Controllers
         }
 
         // POST: GuestBookings/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("GuestBookingId,GuestId,EventId,BookingDate")] GuestBooking guestBooking)
@@ -153,21 +123,21 @@ namespace ThAmCo.Events.Controllers
         {
             if (_context.GuestBookings == null)
             {
-                return Problem("Entity set 'EventsDbContext.GuestBookings'  is null.");
+                return Problem("Entity set 'EventsDbContext.GuestBookings' is null.");
             }
             var guestBooking = await _context.GuestBookings.FindAsync(id);
             if (guestBooking != null)
             {
                 _context.GuestBookings.Remove(guestBooking);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GuestBookingExists(int id)
         {
-          return _context.GuestBookings.Any(e => e.GuestBookingId == id);
+            return _context.GuestBookings.Any(e => e.GuestBookingId == id);
         }
     }
 }

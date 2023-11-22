@@ -1,0 +1,35 @@
+﻿@model ThAmCo.Events.ViewModels.AddStaffingViewModel
+
+@{
+    ViewData["Title"] = "Add Staffing";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="AddStaffing" method="post">
+    <input type="hidden" asp-for="EventId" />
+
+    <div class="form-group">
+        <label asp-for="SelectedStaffId" class="control-label">Select Staff Member</label>
+        @Html.DropDownListFor(model => model.SelectedStaffId, Model.AvailableStaffMembers, "Select Staff Member", new { @class = "form-control" })
+        <span asp-validation-for="SelectedStaffId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SelectedRole" class="control-label">Select Role</label>
+        @Html.DropDownListFor(model => model.SelectedRole, Model.AvailableRoles, "Select Role", new { @class = "form-control" })
+        <span asp-validation-for="SelectedRole" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AssignmentDate" class="control-label">Assignment Date</label>
+        <input asp-for="AssignmentDate" class="form-control" />
+        <span asp-validation-for="AssignmentDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Add Staffing" class="btn btn-primary" />
+    </div>
+</form>
+
+<a asp-action="Details" asp-route-id="@Model.EventId">Back to Event Details</a>

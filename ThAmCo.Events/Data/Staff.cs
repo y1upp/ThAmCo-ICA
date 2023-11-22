@@ -7,7 +7,7 @@ namespace ThAmCo.Events.Data
         public int StaffId { get; set; }
         
         [Required]
-        public String FirstName { get; set; }
+        public String StaffFirstName { get; set; }
         [Required]
         public String LastName { get; set; }
         [DataType(DataType.EmailAddress)]

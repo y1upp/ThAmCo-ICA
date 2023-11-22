@@ -24,7 +24,7 @@ namespace ThAmCo.Events.Data
         public int VenueId { get; set; }
 
         public ICollection<GuestBooking> GuestBookings { get; set; }
-        public ICollection<Staffing> staffings { get; set; }
+        public ICollection<Staffing> Staffings { get; set; }
         public EventType EventType { get; set; }
         public Reservation Reservation { get; set; }
     }

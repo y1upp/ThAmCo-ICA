@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.ViewModels
 {
@@ -11,6 +12,7 @@ namespace ThAmCo.Events.ViewModels
         [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
         [Required]
-        public int VenueId { get; set; }
+        public int VenueId { get; set; } 
+        public ICollection<Staffing> Staffings { get; set; }
     }
 }

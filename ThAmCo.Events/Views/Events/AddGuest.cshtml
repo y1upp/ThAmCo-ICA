@@ -1,0 +1,23 @@
+﻿@model ThAmCo.Events.ViewModels.AddGuestViewModel
+
+@{
+    ViewData["Title"] = "Add Guest";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="AddGuest" method="post">
+    <input type="hidden" asp-for="EventId" />
+
+    <div class="form-group">
+        <label asp-for="SelectedGuestId" class="control-label">Select Guest</label>
+        <select asp-for="SelectedGuestId" class="form-control" asp-items="Model.AvailableGuests"></select>
+        <span asp-validation-for="SelectedGuestId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Add Guest" class="btn btn-primary" />
+    </div>
+</form>
+
+<a asp-action="Details" asp-route-id="@Model.EventId">Back to Event Details</a>

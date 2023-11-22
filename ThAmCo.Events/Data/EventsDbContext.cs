@@ -15,6 +15,7 @@ namespace ThAmCo.Events.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<EventType> EventTypes { get; set; }
         public DbSet<Reservation> Reservation { get; set; }
+        public DbSet<Staff> Staffs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
