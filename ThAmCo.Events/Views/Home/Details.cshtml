@@ -1,0 +1,21 @@
+﻿@model ThAmCo.Events.Data.Event
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Event Details</h1>
+
+<div>
+    <h4>Event Title: @Model.Title</h4>
+    <h4>Date: @Model.Date.ToShortDateString()</h4>
+    <h4>Venue ID: @Model.VenueId</h4>
+
+    <!-- You can add more details based on your model structure -->
+</div>
+
+<!-- Links to navigate back -->
+<p>
+    <a asp-action="Index">Return to Home Page</a> |
+    <a asp-action="Index" asp-controller="Events">Navigate to Events</a>
+</p>

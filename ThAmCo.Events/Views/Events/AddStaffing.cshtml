@@ -23,7 +23,7 @@
 
     <div class="form-group">
         <label asp-for="AssignmentDate" class="control-label">Assignment Date</label>
-        <input asp-for="AssignmentDate" class="form-control" />
+        <input asp-for="AssignmentDate" class="form-control" value="@DateTime.Now" />
         <span asp-validation-for="AssignmentDate" class="text-danger"></span>
     </div>
 

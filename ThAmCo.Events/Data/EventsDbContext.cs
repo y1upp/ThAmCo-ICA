@@ -20,13 +20,14 @@ namespace ThAmCo.Events.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<EventType>().HasData(
                 new EventType { EventTypeId = 1, Name = "Conference" },
                 new EventType { EventTypeId = 2, Name = "Workshop" },
                 new EventType { EventTypeId = 3, Name = "Music Festival" },
                 new EventType { EventTypeId = 4, Name = "Job Showcase" },
                 new EventType { EventTypeId = 5, Name = "University showcase" }
-                );
+            );
         }
 
     }

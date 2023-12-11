@@ -1,29 +1,29 @@
 ﻿@model IEnumerable<ThAmCo.Events.Data.Staff>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "List of Staff";
 }
 
-<h1>Index</h1>
+<h1>List of Staff</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add</a>
 </p>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StaffFirstName)
+                First Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                Last Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                Email
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
+                Phone Number
             </th>
             <th></th>
         </tr>

@@ -1,8 +1,67 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<ThAmCo.Events.Data.Event>
+
+@{
+    ViewData["Title"] = "Index";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <!-- Add your CSS styles and scripts as needed -->
+</head>
+<body>
+    <div class="text-center">
+        <section>
+            <h2>Welcome to ThAmCo Events Management Website</h2>
+            <p>
+                Explore and manage events seamlessly with our platform. Whether you're planning a corporate conference, a wedding, or a community gathering,
+                ThAmCo Events is here to simplify the process for you. From guest bookings to staffing, we've got you covered.
+            </p>
+            <p>
+                Get started by creating your first event or navigate through the existing events to manage the details effortlessly.
+            </p>
+        </section>
+    </div>
+    <section>
+        <h2>Latest Events</h2>
+        <!-- Display a list of latest events with links to details -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VenueId)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderByDescending(e => e.Date).Take(5))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VenueId)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.EventId">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+    <!-- Add more sections or content as needed -->
+</body>
+</html>
