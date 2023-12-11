@@ -32,7 +32,7 @@ namespace ThAmCo.Venues.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlite($"Data Source={DbPath}");
+            optionsBuilder.UseSqlite("Data Source=ThAmCo.Venues.db", b => b.MigrationsAssembly("ThAmCo.Venues"));
         }
 
 

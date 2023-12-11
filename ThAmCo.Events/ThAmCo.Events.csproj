@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ThAmCo.Catering\ThAmCo.Catering.csproj" />
+    <ProjectReference Include="..\ThAmCo.Venues\ThAmCo.Venues.csproj" />
   </ItemGroup>
 
 </Project>
