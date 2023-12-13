@@ -1,16 +1,14 @@
-﻿<!-- Index.cshtml for Active Guests -->
+﻿<!-- RecentlyDeleted.cshtml for Recently Deleted Guests -->
 @model IEnumerable<ThAmCo.Events.Data.Guest>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Recently Deleted Guests";
 }
 
-<h1>Create a New Guest Entry</h1>
+<h1>Recently Deleted Guests</h1>
 
 <p>
-    <a asp-action="Create">Add</a> |
-    <a asp-action="Index">All Guests</a> |
-    <a asp-action="RecentlyDeleted">Recently Deleted Guests</a>
+    <a asp-action="Index">Back to All Guests</a>
 </p>
 
 <table class="table">
@@ -48,10 +46,12 @@
                     @Html.DisplayFor(modelItem => item.Phone)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.GuestId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.GuestId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.GuestId">Delete</a> |
-                    <a asp-action="Anonymize" asp-route-id="@item.GuestId" class="btn btn-danger">Anonymize</a> 
+                    <!-- Restore Button -->
+                    <form method="post" asp-action="Restore" asp-route-id="@item.GuestId">
+                        <button type="submit" class="btn btn-success">
+                            Restore
+                        </button>
+                    </form>
                 </td>
             </tr>
         }

@@ -18,10 +18,14 @@ namespace ThAmCo.Events.Controllers
             _context = context;
         }
 
-        // GET: Guests
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return View(await _context.Guests.ToListAsync());
+            var guests = _context.Guests.ToList();
+
+            // Exclude guests that are deleted or recently deleted
+            var activeGuests = guests.Where(g => !g.RecentlyDeleted && !g.IsDeleted).ToList();
+
+            return View(activeGuests);
         }
 
         // GET: Guests/Details/5
@@ -124,7 +128,8 @@ namespace ThAmCo.Events.Controllers
             }
 
             var guest = await _context.Guests
-                .FirstOrDefaultAsync(m => m.GuestId == id);
+                .FirstOrDefaultAsync(m => m.GuestId == id && !m.IsDeleted);
+
             if (guest == null)
             {
                 return NotFound();
@@ -140,16 +145,84 @@ namespace ThAmCo.Events.Controllers
         {
             if (_context.Guests == null)
             {
-                return Problem("Entity set 'EventsDbContext.Guests'  is null.");
+                return Problem("Entity set 'EventsDbContext.Guests' is null.");
             }
+
+            var guest = await _context.Guests.FindAsync(id);
+
+            if (guest != null)
+            {
+                // Soft delete by setting IsDeleted to true
+                guest.IsDeleted = true;
+
+                // Additionally, mark as RecentlyDeleted
+                guest.RecentlyDeleted = true;
+
+                _context.Update(guest);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Anonymize(int id)
+        {
+            // Retrieve guest information based on id
+            var guest = _context.Guests.Find(id);
+
+            // Pass the guest data to the Anonymize view
+            return View(guest);
+        }
+
+        [HttpPost, ActionName("AnonymizeConfirmed")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AnonymizeConfirmed(int id)
+        {
             var guest = await _context.Guests.FindAsync(id);
             if (guest != null)
             {
-                _context.Guests.Remove(guest);
+                guest.Anonymize();
+                await _context.SaveChangesAsync();
             }
-            
-            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult ToggleRecentlyDeleted(int id)
+        {
+            var guest = _context.Guests.Find(id);
+
+            if (guest != null)
+            {
+                guest.RecentlyDeleted = !guest.RecentlyDeleted;
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult RecentlyDeleted()
+        {
+            var model = _context.Guests.Where(g => g.RecentlyDeleted).ToList();
+            return View(model);
+        }
+
+        public IActionResult Restore(int id)
+        {
+            var guest = _context.Guests.Find(id);
+
+            if (guest != null)
+            {
+                // Mark as not recently deleted
+                guest.RecentlyDeleted = false;
+
+                // Mark as not deleted
+                guest.IsDeleted = false;
+
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(RecentlyDeleted));
         }
 
         private bool GuestExists(int id)

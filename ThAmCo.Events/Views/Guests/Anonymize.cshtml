@@ -1,0 +1,11 @@
+﻿@model ThAmCo.Events.Data.Guest
+
+<!-- Your Anonymize view content goes here -->
+
+<h2>Anonymize Guest</h2>
+
+<p>Are you sure you want to anonymize this guest?</p>
+
+<form method="post" asp-action="AnonymizeConfirmed" asp-route-id="@Model.GuestId">
+    <button type="submit" class="btn btn-danger">Anonymize</button>
+</form>
