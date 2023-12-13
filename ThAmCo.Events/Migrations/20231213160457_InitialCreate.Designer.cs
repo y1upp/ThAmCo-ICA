@@ -11,8 +11,8 @@ using ThAmCo.Events.Data;
 namespace ThAmCo.Events.Migrations
 {
     [DbContext(typeof(EventsDbContext))]
-    [Migration("20231109185506_AddEventTypeIdToEvent")]
-    partial class AddEventTypeIdToEvent
+    [Migration("20231213160457_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,7 +62,7 @@ namespace ThAmCo.Events.Migrations
 
                     b.HasKey("EventTypeId");
 
-                    b.ToTable("EventType");
+                    b.ToTable("EventTypes");
 
                     b.HasData(
                         new
@@ -105,12 +105,18 @@ namespace ThAmCo.Events.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("RecentlyDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("GuestId");
 
@@ -166,15 +172,15 @@ namespace ThAmCo.Events.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StaffFirstName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("StaffId");
@@ -259,7 +265,7 @@ namespace ThAmCo.Events.Migrations
             modelBuilder.Entity("ThAmCo.Events.Data.Staffing", b =>
                 {
                     b.HasOne("ThAmCo.Events.Data.Event", "Event")
-                        .WithMany("staffings")
+                        .WithMany("Staffings")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -279,7 +285,7 @@ namespace ThAmCo.Events.Migrations
                 {
                     b.Navigation("GuestBookings");
 
-                    b.Navigation("staffings");
+                    b.Navigation("Staffings");
                 });
 
             modelBuilder.Entity("ThAmCo.Events.Data.Guest", b =>
