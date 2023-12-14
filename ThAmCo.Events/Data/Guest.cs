@@ -24,7 +24,7 @@ namespace ThAmCo.Events.Data
             LastName = "User";
             Email = "anonymized@example.com";
             Phone = "000-000-0000";
-            IsDeleted = true;  // Assuming you still want to mark it as deleted
+            IsDeleted = true;  // mark it as deleted
         }
 
         public ICollection<GuestBooking> GuestBookings { get; set; }
