@@ -1,0 +1,16 @@
+﻿@model ThAmCo.Events.ViewModels.LinkVenueViewModel
+
+<h1>Link Venue to Event</h1>
+
+<p>Event: @Model.Event.Title</p>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <label for="SelectedVenueId">Select Venue:</label>
+        @Html.DropDownListFor(model => model.SelectedVenueId, new SelectList(Model.AvailableVenues, "VenueId", "Name"), "Select Venue", new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Link Venue</button>
+}
+
+<a asp-action="Details" asp-route-id="@Model.Event.EventId">Back to Event Details</a>

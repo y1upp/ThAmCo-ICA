@@ -1,36 +1,39 @@
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
 
+// Create a new WebApplication builder
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Configure the DbContext for the EventsDbContext with SQLite as the database provider
 builder.Services.AddDbContext<EventsDbContext>(options =>
 {
-    options.UseSqlite("Data Source=events.db");
+    options.UseSqlite("Data Source=events.db"); // SQLite database connection string
 });
 
-var app = builder.Build();
+var app = builder.Build(); // Build the WebApplication
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Home/Error"); // Handle exceptions by redirecting to the Error action in HomeController
+
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+app.UseHttpsRedirection(); // Redirect HTTP requests to HTTPS
+app.UseStaticFiles(); // Enable static file serving
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseRouting(); // Enable routing
 
-app.UseRouting();
+app.UseAuthorization(); // Enable authorization
 
-app.UseAuthorization();
-
+// Map the default controller route with optional id parameter
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+app.Run(); // Run the application

@@ -1,16 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ThAmCo.Catering.Data;
-
+using System.Collections.Generic;
 /*
  * CateringDbContext class represents the Entity Framework database
  * conext used to interact with the database. it defines DbSet 
  * properties for each entity and sets up the database relationships and 
  * initial data seeding. 
  */
-
-using Microsoft.EntityFrameworkCore;
-using ThAmCo.Catering.Data;
-using System.Collections.Generic;
 
 namespace ThAmCo.Catering.Data
 {

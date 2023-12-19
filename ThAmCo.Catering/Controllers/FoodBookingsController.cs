@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Catering.Data;
 
+// Define the controller with routing attribute
 namespace ThAmCo.Catering.Controllers
 {
     [Route("api/[controller]")]
@@ -15,6 +16,7 @@ namespace ThAmCo.Catering.Controllers
     {
         private readonly CateringDbContext _context;
 
+        // Constructor injection of the database context
         public FoodBookingsController(CateringDbContext context)
         {
             _context = context;
@@ -24,6 +26,7 @@ namespace ThAmCo.Catering.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FoodBooking>>> GetFoodBookings()
         {
+            // Retrieve all food bookings from the database
             return await _context.FoodBookings.ToListAsync();
         }
 
@@ -31,34 +34,40 @@ namespace ThAmCo.Catering.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<FoodBooking>> GetFoodBooking(int id)
         {
+            // Retrieve a specific food booking from the database based on the provided id
             var foodBooking = await _context.FoodBookings.FindAsync(id);
 
+            // Check if the food booking exists
             if (foodBooking == null)
             {
                 return NotFound();
             }
 
+            // Return the food booking
             return foodBooking;
         }
 
         // PUT: api/FoodBookings/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFoodBooking(int id, FoodBooking foodBooking)
         {
+            // Check if the provided id matches the id in the FoodBooking object
             if (id != foodBooking.FoodBookingId)
             {
                 return BadRequest();
             }
 
+            // Mark the FoodBooking entity as modified and update it in the database
             _context.Entry(foodBooking).State = EntityState.Modified;
 
             try
             {
+                // Save changes to the database
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
+                // Check for concurrency exception
                 if (!FoodBookingExists(id))
                 {
                     return NotFound();
@@ -68,18 +77,20 @@ namespace ThAmCo.Catering.Controllers
                     throw;
                 }
             }
-
+            
+            // Return a 204 No Content response
             return NoContent();
         }
 
         // POST: api/FoodBookings
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<FoodBooking>> PostFoodBooking(FoodBooking foodBooking)
         {
+            // Add the new FoodBooking entity to the database
             _context.FoodBookings.Add(foodBooking);
             await _context.SaveChangesAsync();
 
+            // Return a 201 Created response with the created FoodBooking object
             return CreatedAtAction("GetFoodBooking", new { id = foodBooking.FoodBookingId }, foodBooking);
         }
 
@@ -87,18 +98,24 @@ namespace ThAmCo.Catering.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFoodBooking(int id)
         {
+            // Retrieve the food booking to be deleted from the database
             var foodBooking = await _context.FoodBookings.FindAsync(id);
+
+            // Check if the food booking exists
             if (foodBooking == null)
             {
                 return NotFound();
             }
 
+            // Remove the food booking from the database
             _context.FoodBookings.Remove(foodBooking);
             await _context.SaveChangesAsync();
 
+            // Return a 204 No Content response
             return NoContent();
         }
 
+        // Helper method to check if a food booking with a specific id exists
         private bool FoodBookingExists(int id)
         {
             return _context.FoodBookings.Any(e => e.FoodBookingId == id);
